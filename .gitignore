@@ -1,0 +1,16 @@
+# Docker / volumes
+data/
+!data/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Env files | visible for now since its just on local
+# .env
+
+# OS
+.DS_Store
