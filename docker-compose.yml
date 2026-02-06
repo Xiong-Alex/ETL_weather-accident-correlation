@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    env_file: .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/01_init.sql:ro
+
+  jupyter:
+    image: python:3.11-slim
+    container_name: jupyter
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "8888:8888"
+    command: >
+      bash -c "python -m ensurepip &&
+              python -m pip install --upgrade pip &&
+              python -m pip install -r requirements.txt &&
+              python -m pip install jupyter ipykernel &&
+              python -m jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token= --NotebookApp.password="
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
