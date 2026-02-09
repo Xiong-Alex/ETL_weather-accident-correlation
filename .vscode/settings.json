@@ -1,0 +1,5 @@
+// Auto Config Notebooks to use Jupyter Server via Dockers
+{
+  "jupyter.jupyterServerType": "remote",
+  "jupyter.jupyterServer.uri": "http://localhost:8888"
+}

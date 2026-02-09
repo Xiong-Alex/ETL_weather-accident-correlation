@@ -67,3 +67,55 @@ CREATE INDEX IF NOT EXISTS idx_silver_stations_lat_lon
 --     * one row per station
 --     * safe to join with fact tables
 -- ============================================================
+
+-- ============================================================
+-- BRONZE: DAILY WEATHER OBSERVATIONS (RAW)
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS bronze.weather_daily (
+    station_id   TEXT NOT NULL,
+    obs_date     TEXT NOT NULL,   -- YYYY-DDD (day-of-year, raw)
+    element      TEXT NOT NULL,   -- PRCP, TMAX, TMIN, etc.
+    value        INTEGER,         -- raw value (scaled)
+    m_flag       TEXT,
+    q_flag       TEXT,
+    s_flag       TEXT,
+
+    source_file  TEXT,
+    ingested_at  TIMESTAMPTZ DEFAULT now()
+);
+
+-- Helpful indexes
+CREATE INDEX IF NOT EXISTS idx_bronze_weather_station
+    ON bronze.weather_daily (station_id);
+
+CREATE INDEX IF NOT EXISTS idx_bronze_weather_date
+    ON bronze.weather_daily (obs_date);
+
+CREATE INDEX IF NOT EXISTS idx_bronze_weather_element
+    ON bronze.weather_daily (element);
+
+-- ============================================================
+-- SILVER: DAILY WEATHER OBSERVATIONS (CLEAN)
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS silver.weather_daily (
+    station_id    TEXT NOT NULL,
+    obs_date      DATE NOT NULL,
+    element       TEXT NOT NULL,
+
+    value         DOUBLE PRECISION,  -- real units (mm, °C)
+    unit          TEXT NOT NULL,      -- 'mm', 'celsius', etc.
+
+    created_at    TIMESTAMPTZ DEFAULT now(),
+    last_updated  TIMESTAMPTZ DEFAULT now(),
+
+    PRIMARY KEY (station_id, obs_date, element)
+);
+
+-- Indexes for analytics
+CREATE INDEX IF NOT EXISTS idx_silver_weather_station_date
+    ON silver.weather_daily (station_id, obs_date);
+
+CREATE INDEX IF NOT EXISTS idx_silver_weather_element
+    ON silver.weather_daily (element);
