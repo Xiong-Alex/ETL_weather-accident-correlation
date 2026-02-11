@@ -191,61 +191,52 @@ CREATE UNLOGGED TABLE bronze.us_accidents (
 CREATE TABLE silver.us_accidents (
     accident_id            TEXT PRIMARY KEY,
 
-    severity               SMALLINT,
+    severity               SMALLINT NOT NULL,
 
-    start_time_utc          TIMESTAMPTZ,
-    end_time_utc            TIMESTAMPTZ,
-    duration_minutes        INTEGER,
+    start_time_utc         TIMESTAMPTZ NOT NULL,
+    end_time_utc           TIMESTAMPTZ,
+    duration_minutes       INTEGER,
 
-    latitude                DOUBLE PRECISION,
-    longitude               DOUBLE PRECISION,
-    distance_mi             DOUBLE PRECISION,
+    latitude               DOUBLE PRECISION NOT NULL,
+    longitude              DOUBLE PRECISION NOT NULL,
+    distance_mi            DOUBLE PRECISION,
 
-    city                    TEXT,
-    county                  TEXT,
-    state                   CHAR(2),
-    zipcode                 TEXT,
+    city                   TEXT,
+    county                 TEXT,
+    state                  CHAR(2) NOT NULL,
+    zipcode                TEXT,
 
-    weather_time_utc        TIMESTAMPTZ,
-    temperature_f           DOUBLE PRECISION,
-    wind_chill_f            DOUBLE PRECISION,
-    humidity_pct            DOUBLE PRECISION,
-    pressure_in             DOUBLE PRECISION,
-    visibility_mi           DOUBLE PRECISION,
-    wind_speed_mph          DOUBLE PRECISION,
-    precipitation_in        DOUBLE PRECISION,
-    weather_condition       TEXT,
+    weather_time_utc       TIMESTAMPTZ,
+    temperature_f          DOUBLE PRECISION,
+    wind_chill_f           DOUBLE PRECISION,
+    humidity_pct           DOUBLE PRECISION,
+    pressure_in            DOUBLE PRECISION,
+    visibility_mi          DOUBLE PRECISION,
+    wind_speed_mph         DOUBLE PRECISION,
+    precipitation_in       DOUBLE PRECISION,
+    weather_condition      TEXT,
 
-    is_amenity              BOOLEAN,
-    is_bump                 BOOLEAN,
-    is_crossing             BOOLEAN,
-    is_junction             BOOLEAN,
-    is_railway              BOOLEAN,
-    is_roundabout           BOOLEAN,
-    is_station              BOOLEAN,
-    is_stop                 BOOLEAN,
-    is_traffic_calming      BOOLEAN,
-    is_traffic_signal       BOOLEAN,
+    is_amenity             BOOLEAN,
+    is_bump                BOOLEAN,
+    is_crossing            BOOLEAN,
+    is_junction            BOOLEAN,
+    is_railway             BOOLEAN,
+    is_roundabout          BOOLEAN,
+    is_station             BOOLEAN,
+    is_stop                BOOLEAN,
+    is_traffic_calming     BOOLEAN,
+    is_traffic_signal      BOOLEAN,
 
-    sunrise_sunset          TEXT,
-    civil_twilight          TEXT,
-    nautical_twilight       TEXT,
-    astronomical_twilight   TEXT
+    sunrise_sunset         TEXT,
+    civil_twilight         TEXT,
+    nautical_twilight      TEXT,
+    astronomical_twilight  TEXT
 );
-
-
-CREATE INDEX idx_bronze_accidents_start_time
-ON bronze.us_accidents (start_time);
 
 -- SILVER (important)
 CREATE INDEX idx_silver_accidents_start_time
 ON silver.us_accidents (start_time_utc);
 
-CREATE INDEX idx_silver_accidents_state
-ON silver.us_accidents (state);
+CREATE INDEX idx_silver_state_date
+ON silver.us_accidents (state, start_time_utc);
 
-CREATE INDEX idx_silver_accidents_weather_time
-ON silver.us_accidents (weather_time_utc);
-
-CREATE INDEX idx_silver_accidents_lat_lng
-ON silver.us_accidents (latitude, longitude);
