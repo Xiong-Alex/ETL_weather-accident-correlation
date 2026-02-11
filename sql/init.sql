@@ -9,7 +9,7 @@ CREATE SCHEMA IF NOT EXISTS silver;
 -- BRONZE: RAW STATION METADATA
 -- ============================================================
 
-CREATE TABLE IF NOT EXISTS bronze.stations (
+CREATE UNLOGGED TABLE IF NOT EXISTS bronze.stations (
     station_id   TEXT NOT NULL,
 
     latitude     TEXT,
@@ -71,7 +71,7 @@ CREATE INDEX IF NOT EXISTS idx_silver_stations_lat_lon
 -- BRONZE: DAILY WEATHER OBSERVATIONS (RAW)
 -- ============================================================
 
-CREATE TABLE IF NOT EXISTS bronze.weather_daily (
+CREATE UNLOGGED TABLE IF NOT EXISTS bronze.weather_daily (
     station_id   TEXT NOT NULL,
     obs_date     TEXT NOT NULL,   -- YYYY-DDD (day-of-year, raw)
     element      TEXT NOT NULL,   -- PRCP, TMAX, TMIN, etc.
@@ -126,7 +126,7 @@ CREATE INDEX IF NOT EXISTS idx_silver_weather_element
 -- ----------------------------------
 
 
-CREATE TABLE bronze.us_accidents (
+CREATE UNLOGGED TABLE bronze.us_accidents (
     id                      TEXT PRIMARY KEY,
     source                  TEXT,
     severity                INTEGER,
