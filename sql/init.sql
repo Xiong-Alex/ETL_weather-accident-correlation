@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS bronze.stations (
     hcn          TEXT,
     wmo          TEXT,
 
-    source_file  TEXT,
     ingested_at  TIMESTAMPTZ DEFAULT now()
 );
 
@@ -81,7 +80,6 @@ CREATE TABLE IF NOT EXISTS bronze.weather_daily (
     q_flag       TEXT,
     s_flag       TEXT,
 
-    source_file  TEXT,
     ingested_at  TIMESTAMPTZ DEFAULT now()
 );
 
