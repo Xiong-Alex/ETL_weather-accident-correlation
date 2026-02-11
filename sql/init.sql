@@ -26,6 +26,7 @@ CREATE UNLOGGED TABLE IF NOT EXISTS bronze.stations (
     gsn          TEXT,
     hcn          TEXT,
     wmo          TEXT,
+
     ingested_at  TIMESTAMPTZ DEFAULT now()
 );
 
@@ -141,6 +142,7 @@ CREATE UNLOGGED TABLE IF NOT EXISTS bronze.us_accidents (
     airport_code            TEXT,
 
     weather_timestamp       TIMESTAMP,
+
     temperature_f           DOUBLE PRECISION,
     wind_chill_f            DOUBLE PRECISION,
     humidity_pct            DOUBLE PRECISION,
@@ -154,16 +156,16 @@ CREATE UNLOGGED TABLE IF NOT EXISTS bronze.us_accidents (
     amenity                 BOOLEAN,
     bump                    BOOLEAN,
     crossing                BOOLEAN,
-    give_way                BOOLEAN,
+    give_way                BOOLEAN, ---------
     junction                BOOLEAN,
-    no_exit                 BOOLEAN,
-    railway                 BOOLEAN,
+    no_exit                 BOOLEAN, ---------
+    railway                 BOOLEAN, 
     roundabout              BOOLEAN,
-    station                 BOOLEAN,
+    station                 BOOLEAN, 
     stop                    BOOLEAN,
-    traffic_calming         BOOLEAN,
+    traffic_calming         BOOLEAN, 
     traffic_signal          BOOLEAN,
-    turning_loop            BOOLEAN,
+    turning_loop            BOOLEAN, ---------
 
     sunrise_sunset          TEXT,
     civil_twilight          TEXT,
@@ -194,6 +196,8 @@ CREATE TABLE IF NOT EXISTS silver.us_accidents (
     zipcode                TEXT,
 
     weather_time_utc       TIMESTAMPTZ,
+  --------- convert to local, leave as is
+
     temperature_f          DOUBLE PRECISION,
     wind_chill_f           DOUBLE PRECISION,
     humidity_pct           DOUBLE PRECISION,
@@ -213,7 +217,11 @@ CREATE TABLE IF NOT EXISTS silver.us_accidents (
     is_stop                BOOLEAN,
     is_traffic_calming     BOOLEAN,
     is_traffic_signal      BOOLEAN,
+    is_give_way boolean,
+    is_no_exit boolean,
+    is_turning_loop boolean,
 
+    -- can I convert this into a boolean
     sunrise_sunset         TEXT,
     civil_twilight         TEXT,
     nautical_twilight      TEXT,
@@ -270,10 +278,10 @@ CREATE TABLE IF NOT EXISTS gold.accident_weather (
     tmin_c             DOUBLE PRECISION,
     prcp_mm            DOUBLE PRECISION,
     snow_mm            DOUBLE PRECISION,
-    avg_wind_mph       DOUBLE PRECISION,
+    avg_wind_mph       DOUBLE PRECISION, --- drop
 
-    precipitation_flag BOOLEAN,
-    snow_flag          BOOLEAN,
+    precipitation_flag BOOLEAN, -- maybe
+    snow_flag          BOOLEAN, -- maybe
 
     created_at         TIMESTAMPTZ DEFAULT now()
 );

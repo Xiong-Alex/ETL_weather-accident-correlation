@@ -7,3 +7,5 @@ jupyterlab
 matplotlib
 seaborn
 tqdm
+plotly
+ipywidgets
